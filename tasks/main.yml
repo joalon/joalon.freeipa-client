@@ -1,0 +1,53 @@
+---
+
+# NTP & clock
+- name: Gather package facts
+  package_facts:
+    manager: "auto"
+
+- name: Check if chrony is installed
+  debug:
+    msg: "Chrony found"
+  when: "'chrony' in ansible_facts.packages"
+  notify: disable chrony
+
+- name: Install ntpd
+  yum:
+    name: ntp
+    state: installed
+
+- name: Configure ntpd
+  template:
+    src: ntp.conf
+    dest: /etc/ntp.conf
+  notify: restart ntpd
+
+- name: Start and enable ntpd
+  service:
+    name: ntpd
+    enabled: yes
+    state: started
+
+
+# Hostname
+- name: Set hostname
+  hostname:
+    name: "{{ hostname }}"
+    use: redhat
+
+
+# EPEL
+- name: Enable the EPEL repository
+  yum_repository:
+    name: epel
+    description: Epel rebuild for armhfp
+    baseurl: https://armv7.dev.centos.org/repodir/epel-pass-1/
+    enabled: yes
+    gpgcheck: no
+  notify: yum update
+
+
+# Enroll
+
+
+

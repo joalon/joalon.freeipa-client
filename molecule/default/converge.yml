@@ -1,0 +1,9 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include joalon.freeipa-client"
+      include_role:
+        name: "joalon.freeipa-client"
+      vars:
+        hostname: test1.joalon.se

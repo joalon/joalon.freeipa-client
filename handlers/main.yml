@@ -1,0 +1,23 @@
+---
+
+- name: yum update
+  yum:
+    name: '*'
+    state: latest
+
+- name: restart ntpd
+  service:
+    name: ntpd
+    state: restarted
+
+- name: disable chrony
+  service:
+    name: chronyd
+    enabled: no
+    state: stopped
+
+- name: enable firewalld
+  service:
+    name: firewalld
+    enabled: yes
+    state: started
